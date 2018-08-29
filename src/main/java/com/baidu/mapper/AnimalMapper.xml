@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baidu.mapper.AnimalMapper">
+	<select id="findListCount" resultType="int">
+		SELECT count(*) from t_animal t1 
+		LEFT JOIN t_type t2 on t1.tid=t2.tid 
+		LEFT JOIN t_area t3 on t1.aid=t3.aid
+		<where>
+			<if test="keywords!=null and keywords !=''">
+				t1.animalname like concat('%',#{keywords},'%')
+			</if>
+		</where>
+	</select>
+	<select id="findList" resultType="com.baidu.dto.Animal">
+		SELECT * from t_animal t1 
+		LEFT JOIN t_type t2 on t1.tid=t2.tid 
+		LEFT JOIN t_area t3 on t1.aid=t3.aid
+		<where>
+			<if test="keywords!=null and keywords !=''">
+				t1.animalname like concat('%',#{keywords},'%')
+			</if>
+		</where>
+		limit #{page},#{rows}
+	</select>
+	
+	<delete id="deleteByIds">
+		delete from t_animal where animalid in (${value})
+	</delete>
+	
+	<select id="findAnimal" resultType="com.baidu.dto.Animal">
+		select * from t_area
+	</select>
+	<select id="findType" resultType="com.baidu.dto.Animal">
+		select * from t_type
+	</select>
+	
+	<insert id="addAnimal">
+		insert into t_animal(animalname,createdate,tid,aid)
+		values(#{animalname},#{createdate},#{tid},#{aid})
+	</insert>
+	
+	<!-- 根据用户名 和密码查询用户 -->
+<select id="findMenusByPwd" resultType="com.baidu.dto.Animal">
+	select * from h_user where uname = #{uname} and pwd = #{pwd}
+</select>
+
+</mapper>
